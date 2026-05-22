@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
+import { authRouter } from "./modules/auth/auth.route";
 
 export const app = express();
 
@@ -16,6 +17,8 @@ app.get("/", (_req, res) => {
     message: "DevPulse API is running",
   });
 });
+
+app.use("/api/auth", authRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
