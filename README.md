@@ -1,23 +1,24 @@
 # DevPulse
 
-DevPulse is a backend API for reporting bugs, requesting features, and tracking issue status inside a software team.
+DevPulse is a backend API project for an internal issue tracker. Users can register, login, create issues, view issues, and maintainers can manage the issues.
 
 ## Live URL
 
-Add deployed URL here after Render deployment.
+Live link will be added after deployment.
 
 ## Features
 
 - User registration and login
-- Password hashing with bcrypt
-- JWT based authentication
+- Passwords are hashed before saving
+- JWT authentication
 - Contributor and maintainer roles
-- Create bug reports and feature requests
-- Public issue list and issue details
+- Contributors can create bug reports and feature requests
+- Anyone can view the issue list and single issue details
 - Issue filtering by type and status
-- Issue sorting by newest or oldest
-- Contributor issue update rules
-- Maintainer issue update, delete, and metrics access
+- Issue sorting by newest or oldest first
+- Contributors can update their own open issues
+- Maintainers can update and delete issues
+- Maintainers can view basic system metrics
 
 ## Tech Stack
 
@@ -25,20 +26,20 @@ Add deployed URL here after Render deployment.
 - TypeScript
 - Express.js
 - PostgreSQL
-- pg
-- Raw SQL
+- pg package
+- Raw SQL with `pool.query()`
 - bcrypt
 - jsonwebtoken
 
 ## Setup
 
-Install dependencies:
+First install all packages:
 
 ```bash
 npm install
 ```
 
-Create a `.env` file:
+Then create a `.env` file in the root folder:
 
 ```env
 PORT=5000
@@ -48,25 +49,25 @@ JWT_EXPIRES_IN=7d
 BCRYPT_SALT_ROUNDS=10
 ```
 
-Create database tables:
+Run this command to create the database tables:
 
 ```bash
 npm run db:init
 ```
 
-Run in development:
+Start the server in development mode:
 
 ```bash
 npm run dev
 ```
 
-Build the project:
+For production build:
 
 ```bash
 npm run build
 ```
 
-Run production build:
+Run the built project:
 
 ```bash
 npm start
@@ -99,7 +100,7 @@ GET /api/metrics
 
 ## Auth Header
 
-Protected routes need this header:
+For protected routes, send the token like this:
 
 ```txt
 Authorization: <JWT_TOKEN>
@@ -107,7 +108,7 @@ Authorization: <JWT_TOKEN>
 
 ## Query Parameters
 
-`GET /api/issues` supports:
+The `GET /api/issues` endpoint supports these query parameters:
 
 ```txt
 sort=newest | oldest
@@ -130,7 +131,7 @@ Example:
 | id | auto increment integer |
 | name | string |
 | email | unique string |
-| password | hashed string |
+| password | hashed password |
 | role | contributor or maintainer |
 | created_at | timestamp |
 | updated_at | timestamp |
@@ -150,13 +151,9 @@ Example:
 
 ## Deployment
 
-Recommended deployment:
+This project can be deployed on Render.
 
-```txt
-Render
-```
-
-Set these environment variables in Render:
+Environment variables needed in Render:
 
 ```env
 DATABASE_URL=your_neon_database_url
@@ -172,7 +169,7 @@ Build Command: npm install && npm run build
 Start Command: npm start
 ```
 
-Run the database setup before testing the deployed API:
+Before testing the deployed API, the database tables should be created:
 
 ```bash
 npm run db:init
