@@ -30,6 +30,28 @@ export const validateCreateIssueBody = (body: Record<string, unknown>) => {
   };
 };
 
+export const validateUpdateIssueBody = (body: Record<string, unknown>) => {
+  const title = requiredString(body.title, "title");
+  const description = requiredString(body.description, "description");
+  const type = oneOf(requiredString(body.type, "type"), issueTypes, "type") as IssueType;
+  const status = optionalOneOf(body.status, issueStatuses, "status") as IssueStatus | undefined;
+
+  if (title.length > 150) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "title must be at most 150 characters");
+  }
+
+  if (description.length < 20) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "description must be at least 20 characters");
+  }
+
+  return {
+    title,
+    description,
+    type,
+    status,
+  };
+};
+
 export const validateIssueQuery = (query: Record<string, unknown>) => {
   const sortValue = query.sort === undefined ? "newest" : query.sort;
 

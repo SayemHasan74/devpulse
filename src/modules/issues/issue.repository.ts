@@ -73,3 +73,47 @@ export const findReportersByIds = async (ids: number[]) => {
 
   return result.rows;
 };
+
+export const updateIssue = async (
+  id: number,
+  title: string,
+  description: string,
+  type: IssueType,
+  status?: IssueStatus
+) => {
+  const values: unknown[] = [title, description, type, id];
+
+  if (status) {
+    values.push(status);
+    const result = await query<IssueRow>(
+      `UPDATE issues
+       SET title = $1, description = $2, type = $3, status = $5
+       WHERE id = $4
+       RETURNING id, title, description, type, status, reporter_id, created_at, updated_at`,
+      values
+    );
+
+    return result.rows[0];
+  }
+
+  const result = await query<IssueRow>(
+    `UPDATE issues
+     SET title = $1, description = $2, type = $3
+     WHERE id = $4
+     RETURNING id, title, description, type, status, reporter_id, created_at, updated_at`,
+    values
+  );
+
+  return result.rows[0];
+};
+
+export const deleteIssue = async (id: number) => {
+  const result = await query<IssueRow>(
+    `DELETE FROM issues
+     WHERE id = $1
+     RETURNING id, title, description, type, status, reporter_id, created_at, updated_at`,
+    [id]
+  );
+
+  return result.rows[0];
+};

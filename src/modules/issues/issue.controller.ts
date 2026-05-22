@@ -2,11 +2,18 @@ import { StatusCodes } from "http-status-codes";
 
 import { asyncHandler } from "../../utils/asyncHandler";
 import { sendResponse } from "../../utils/sendResponse";
-import { createNewIssue, getIssue, getIssues } from "./issue.service";
+import {
+  createNewIssue,
+  deleteExistingIssue,
+  getIssue,
+  getIssues,
+  updateExistingIssue,
+} from "./issue.service";
 import {
   validateCreateIssueBody,
   validateIssueId,
   validateIssueQuery,
+  validateUpdateIssueBody,
 } from "./issue.validation";
 
 export const createIssueHandler = asyncHandler(async (req, res) => {
@@ -34,5 +41,33 @@ export const getIssueHandler = asyncHandler(async (req, res) => {
 
   sendResponse(res, StatusCodes.OK, {
     data: issue,
+  });
+});
+
+export const updateIssueHandler = asyncHandler(async (req, res) => {
+  const issueId = validateIssueId(req.params.id);
+  const data = validateUpdateIssueBody(req.body as Record<string, unknown>);
+  const issue = await updateExistingIssue(
+    issueId,
+    req.user!.id,
+    req.user!.role,
+    data.title,
+    data.description,
+    data.type,
+    data.status
+  );
+
+  sendResponse(res, StatusCodes.OK, {
+    message: "Issue updated successfully",
+    data: issue,
+  });
+});
+
+export const deleteIssueHandler = asyncHandler(async (req, res) => {
+  const issueId = validateIssueId(req.params.id);
+  await deleteExistingIssue(issueId);
+
+  sendResponse(res, StatusCodes.OK, {
+    message: "Issue deleted successfully",
   });
 });
