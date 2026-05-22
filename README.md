@@ -4,7 +4,7 @@ DevPulse is a backend API project for an internal issue tracker. Users can regis
 
 ## Live URL
 
-Live link will be added after deployment.
+https://devpulse-o72j.onrender.com
 
 ## Features
 
