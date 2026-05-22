@@ -64,9 +64,9 @@ export const updateExistingIssue = async (
   id: number,
   userId: number,
   userRole: string,
-  title: string,
-  description: string,
-  type: IssueType,
+  title?: string,
+  description?: string,
+  type?: IssueType,
   status?: IssueStatus
 ) => {
   const issue = await findIssueById(id);
@@ -82,6 +82,10 @@ export const updateExistingIssue = async (
 
     if (issue.status !== "open") {
       throw new AppError(StatusCodes.CONFLICT, "Only open issues can be updated");
+    }
+
+    if (!title || !description || !type || status) {
+      throw new AppError(StatusCodes.FORBIDDEN, "Forbidden");
     }
   }
 

@@ -1,9 +1,9 @@
-import { query } from "../../config/db";
+import { pool } from "../../config/db";
 import { Role } from "../../types/common";
 import { PublicUser, UserRow } from "./auth.types";
 
 export const findUserByEmail = async (email: string) => {
-  const result = await query<UserRow>(
+  const result = await pool.query<UserRow>(
     "SELECT id, name, email, password, role, created_at, updated_at FROM users WHERE email = $1",
     [email]
   );
@@ -17,7 +17,7 @@ export const createUser = async (
   password: string,
   role: Role
 ) => {
-  const result = await query<PublicUser>(
+  const result = await pool.query<PublicUser>(
     `INSERT INTO users (name, email, password, role)
      VALUES ($1, $2, $3, $4)
      RETURNING id, name, email, role, created_at, updated_at`,

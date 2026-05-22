@@ -7,6 +7,7 @@ import {
   issueTypes,
   oneOf,
   optionalOneOf,
+  optionalString,
   requiredString,
 } from "../../utils/validators";
 
@@ -31,16 +32,21 @@ export const validateCreateIssueBody = (body: Record<string, unknown>) => {
 };
 
 export const validateUpdateIssueBody = (body: Record<string, unknown>) => {
-  const title = requiredString(body.title, "title");
-  const description = requiredString(body.description, "description");
-  const type = oneOf(requiredString(body.type, "type"), issueTypes, "type") as IssueType;
+  const title = optionalString(body.title, "title");
+  const description = optionalString(body.description, "description");
+  const typeValue = optionalString(body.type, "type");
+  const type = typeValue ? (oneOf(typeValue, issueTypes, "type") as IssueType) : undefined;
   const status = optionalOneOf(body.status, issueStatuses, "status") as IssueStatus | undefined;
 
-  if (title.length > 150) {
+  if (!title && !description && !type && !status) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "No update data provided");
+  }
+
+  if (title && title.length > 150) {
     throw new AppError(StatusCodes.BAD_REQUEST, "title must be at most 150 characters");
   }
 
-  if (description.length < 20) {
+  if (description && description.length < 20) {
     throw new AppError(StatusCodes.BAD_REQUEST, "description must be at least 20 characters");
   }
 
