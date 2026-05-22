@@ -2,6 +2,9 @@ import cors from "cors";
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
+import { errorHandler } from "./middleware/errorHandler";
+import { notFoundHandler } from "./middleware/notFoundHandler";
+
 export const app = express();
 
 app.use(cors());
@@ -13,3 +16,6 @@ app.get("/", (_req, res) => {
     message: "DevPulse API is running",
   });
 });
+
+app.use(notFoundHandler);
+app.use(errorHandler);
