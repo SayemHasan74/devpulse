@@ -20,3 +20,9 @@ export interface PublicUser extends QueryResultRow {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface TokenPayload {
+  id: number;
+  name: string;
+  role: Role;
+}

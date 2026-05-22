@@ -23,3 +23,17 @@ export const validateSignupBody = (body: Record<string, unknown>) => {
     role,
   };
 };
+
+export const validateLoginBody = (body: Record<string, unknown>) => {
+  const email = requiredString(body.email, "email").toLowerCase();
+  const password = requiredString(body.password, "password");
+
+  if (!emailIsValid(email)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "email is invalid");
+  }
+
+  return {
+    email,
+    password,
+  };
+};
