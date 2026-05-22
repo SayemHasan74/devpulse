@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import { authRouter } from "./modules/auth/auth.route";
+import { issueRouter } from "./modules/issues/issue.route";
 
 export const app = express();
 
@@ -19,6 +20,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/issues", issueRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
