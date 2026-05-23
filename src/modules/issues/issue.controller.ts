@@ -31,6 +31,7 @@ export const getIssuesHandler = asyncHandler(async (req, res) => {
   const issues = await getIssues(query.sort, query.type, query.status);
 
   sendResponse(res, StatusCodes.OK, {
+    message: "Issues retrived successfully",
     data: issues,
   });
 });
@@ -40,6 +41,7 @@ export const getIssueHandler = asyncHandler(async (req, res) => {
   const issue = await getIssue(issueId);
 
   sendResponse(res, StatusCodes.OK, {
+    message: "Issue retrived successfully",
     data: issue,
   });
 });
